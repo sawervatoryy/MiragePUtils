@@ -195,21 +195,6 @@ webhook:
 
 ---
 
-## Сборка из исходников
-
-├── MiragePUtils.java       — главный класс
-├── PunishManager.java      — лесенка, проверки, запуск команд LiteBans
-├── Animations.java         — движок анимаций
-├── AnimationType.java      — типы анимаций
-├── AnimationListener.java  — защита игрока во время анимации
-├── Commands.java           — /punish, /phistory, /mirageputils
-├── Menus.java / MenuListener.java / MenuHolder.java — GUI
-├── Database.java           — журнал SQLite / MySQL
-├── DiscordWebhook.java     — логи в Discord
-├── Messages.java / TimeUtil.java
-└── PunishType / Punishment / ReasonDef / Target
-src/main/resources/ plugin.yml, config.yml, messages.yml
-```
 **Плагин создан студией MirageStudio**
 
 | **Студия** | MirageStudio |
