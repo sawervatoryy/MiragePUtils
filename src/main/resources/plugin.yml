@@ -1,0 +1,48 @@
+name: MiragePUtils
+version: '${version}'
+main: org.example.sawervatoryy.miragePUtils.MiragePUtils
+api-version: '1.21.4'
+load: POSTWORLD
+depend: [LiteBans]
+description: Надстройка над LiteBans — умная лесенка наказаний, GUI и анимации. MirageStudio.
+authors: [sawervatoryy]
+website: https://discord.gg/dWPenZegK
+
+commands:
+  punish:
+    description: Меню наказаний с шаблонами причин и анимациями
+    usage: /punish <игрок> [причина] [-s]
+  phistory:
+    description: История наказаний, выданных через MiragePUtils
+    usage: /phistory <игрок> [страница]
+    aliases: [punishhistory]
+  mirageputils:
+    description: Информация о плагине, перезагрузка, предпросмотр анимаций
+    usage: /mirageputils [reload|about|help|preview|reset]
+    aliases: [mputils, mpu]
+
+permissions:
+  mirageputils.*:
+    description: Все права MiragePUtils
+    default: op
+    children:
+      mirageputils.punish: true
+      mirageputils.punish.severe: true
+      mirageputils.history: true
+      mirageputils.silent: true
+      mirageputils.admin: true
+  mirageputils.punish:
+    description: /punish и меню наказаний
+    default: op
+  mirageputils.punish.severe:
+    description: Тяжёлые причины (угрозы, DDoS) в /punish
+    default: op
+  mirageputils.history:
+    description: /phistory
+    default: op
+  mirageputils.silent:
+    description: Тихие наказания (-s, Shift + ЛКМ в меню)
+    default: op
+  mirageputils.admin:
+    description: reload, preview, reset
+    default: op

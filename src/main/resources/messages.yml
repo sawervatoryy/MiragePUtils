@@ -1,0 +1,87 @@
+# ============================================================
+#  MiragePUtils — сообщения
+#  Студия: MirageStudio | Автор: sawervatoryy
+#  Discord: https://discord.gg/dWPenZegK
+#  Палитра: &f (белый) + &c (красный). Поддерживается &#rrggbb.
+#  Не используйте символ собаки и конструкцию доллар+скобка в файле.
+# ============================================================
+
+prefix: "&c&lMirageP &f» "
+console-name: "Консоль"
+
+words:
+  permanent: "навсегда"
+  none: "нет"
+state:
+  issued: "&fВыдано"
+  reset: "&fСброшено"
+
+# --- Ошибки и уведомления ---
+no-permission: "{prefix}&cУ вас недостаточно прав."
+no-litebans-permission: "{prefix}&cУ вас нет права LiteBans: &f{perm}"
+player-only: "{prefix}&cЭта команда доступна только игрокам."
+usage: "{prefix}&fИспользование: &c{usage}"
+player-not-found: "{prefix}&cИгрок &f{player} &cне найден."
+db-error: "{prefix}&cОшибка базы данных. Подробности в консоли."
+cannot-self: "{prefix}&cНельзя наказать самого себя."
+target-exempt: "{prefix}&cИгрок &f{player} &cимеет иммунитет к наказаниям."
+silent-denied: "{prefix}&cУ вас нет прав на тихие наказания (-s)."
+unknown-reason: "{prefix}&cШаблон причины &f{reason} &cне найден."
+already-animating: "{prefix}&cИгрок &f{player} &cуже находится в анимации."
+animation-started: "{prefix}&fЗапущена анимация &c{anim} &fдля &c{player}&f. Наказание будет выдано в конце."
+reloaded: "{prefix}&fКонфигурация и сообщения &cперезагружены&f."
+reset-done: "{prefix}&fЛесенка игрока &c{player} &fсброшена (записей: &c{count}&f)."
+
+# --- Анимация (то, что видит наказываемый игрок) ---
+animation:
+  title: "&c&lНАКАЗАНИЕ"
+  subtitle: "&f{type}: &c{reason}"
+preview-type: "Предпросмотр"
+preview-reason: "Тест анимации"
+
+history-header: "{prefix}&fИстория &c{player} &f(всего: &c{total}&f, последние 15)"
+history-line: "&c#{id} &f{type} &c| &f{reason} &c| &f{duration} &c| &f{state}"
+
+help:
+  - "{prefix}&fКоманды &cMiragePUtils&f:"
+  - "&c/punish <игрок> [причина] [-s] &f— меню наказаний с анимацией"
+  - "&c/phistory <игрок> &f— история наказаний через MiragePUtils"
+  - "&c/mirageputils preview <тип> &f— предпросмотр анимации"
+  - "&c/mirageputils reset <игрок> &f— сбросить лесенку игрока"
+  - "&c/mirageputils reload &f— перезагрузка"
+  - "&fБаны, муты, предупреждения и кики выдаёт &cLiteBans&f."
+about:
+  - "&c&lMiragePUtils &fv1.0.0"
+  - "&fНадстройка над LiteBans: лесенка наказаний, GUI и анимации"
+  - "&fСтудия: &cMirageStudio"
+  - "&fАвтор: &csawervatoryy"
+  - "&fDiscord: &chttps://discord.gg/dWPenZegK"
+  - "&fСправка: &c/mirageputils help"
+
+# --- Меню ---
+menu:
+  punish:
+    title: "&c&lНаказание &f» &c{player}"
+    head-name: "&c&l{player}"
+    head-lore:
+      - "&fНаказаний через MiragePUtils: &c{total}"
+    lore:
+      - "&fНарушений по этой причине: &c{count}"
+      - "&fБудет выдано: &c{next}"
+      - "&fАнимация: &c{anim}"
+      - " "
+      - "&cЛКМ &f— выдать"
+      - "&cShift + ЛКМ &f— выдать тихо"
+  history:
+    title: "&c&lИстория &f» &c{player}"
+    info: "&fСтраница &c{page}&f/&c{pages} &f| Всего: &c{total}"
+    prev: "&c« Назад"
+    next: "&cВперёд »"
+    item-name: "&c#{id} &f{type}"
+    item-lore:
+      - "&fПричина: &c{reason}"
+      - "&fМодератор: &c{staff}"
+      - "&fДата: &c{date}"
+      - "&fСрок: &c{duration}"
+      - "&fАнимация: &c{animation}"
+      - "&fСтатус: {state}"

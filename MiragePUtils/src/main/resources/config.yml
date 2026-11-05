@@ -1,0 +1,184 @@
+# ============================================================
+#  MiragePUtils — надстройка над LiteBans для Paper 1.21.4+
+#  Студия: MirageStudio | Автор: sawervatoryy
+#  Discord: https://discord.gg/dWPenZegK
+#  Палитра: &f (белый) + &c (красный)
+#
+#  Плагин НЕ хранит баны и муты — их выдаёт и хранит LiteBans.
+#  MiragePUtils показывает меню причин, считает «лесенку»,
+#  проигрывает анимацию и запускает нужную команду LiteBans.
+# ============================================================
+
+# --- Журнал MiragePUtils (для лесенки и /phistory) ---------
+database:
+  type: sqlite              # sqlite | mysql
+  sqlite-file: punishments.db
+  mysql:
+    host: localhost
+    port: 3306
+    database: mirageputils
+    user: root
+    password: ""
+
+# --- Интеграция с LiteBans ---------------------------------
+litebans:
+  # staff   — команда выполняется от имени модератора (в LiteBans он будет указан как «выдавший»)
+  # console — команда выполняется от имени консоли
+  execute-as: staff
+  check-permissions: true    # перед анимацией проверять право litebans.<команда> у модератора
+  check-exempt: true         # не запускать анимацию для игроков с litebans.exempt.<тип>
+  silent-flag: "-s"          # флаг тихого наказания в LiteBans
+  # Шаблоны команд. Плейсхолдеры: {player} {duration} {reason} {silent}
+  commands:
+    ban: "ban {silent}{player} {reason}"
+    tempban: "tempban {silent}{player} {duration} {reason}"
+    ipban: "ipban {silent}{player} {reason}"
+    tempipban: "tempipban {silent}{player} {duration} {reason}"
+    mute: "mute {silent}{player} {reason}"
+    tempmute: "tempmute {silent}{player} {duration} {reason}"
+    warn: "warn {silent}{player} {reason}"
+    tempwarn: "tempwarn {silent}{player} {duration} {reason}"
+    kick: "kick {silent}{player} {reason}"
+
+# --- Анимации наказаний ------------------------------------
+# Игрока поднимает в воздух, вокруг него эффекты, затем вспышка, взрыв и молния —
+# и только после этого выполняется наказание.
+# Типы: ASCENSION (взлёт), STORM (шторм), VORTEX (вихрь), SILENCE (тишина), WARNING (вспышка), NONE
+# Анимацию можно задать и для отдельной причины (animation: ... внутри reason).
+animations:
+  enabled: true
+  by-type:
+    BAN: ASCENSION
+    IPBAN: VORTEX
+    MUTE: SILENCE
+    WARN: WARNING
+    KICK: STORM
+
+# --- Общие настройки ---------------------------------------
+settings:
+  date-format: "dd.MM.yyyy HH:mm"
+  timezone: system             # system или, например, Europe/Moscow
+
+# --- Предупреждения ----------------------------------------
+warns:
+  default-duration: 30d   # срок для шагов WARN в лесенке без срока (perm — навсегда, будет /warn вместо /tempwarn)
+
+# --- Discord webhook ---------------------------------------
+webhook:
+  enabled: false
+  url: "https://discord.com/api/webhooks/YOUR_WEBHOOK"
+  username: "MiragePUtils"
+
+# ============================================================
+#  Шаблоны причин для /punish — «умная лесенка»
+#  ladder: шаги по порядку. Какой шаг будет выдан — зависит от числа
+#  прошлых (не снятых) наказаний игрока по ЭТОЙ причине.
+#  Последний шаг повторяется, если нарушений больше, чем шагов.
+#  Формат шага: "ТИП СРОК" (для WARN срок необязателен, для KICK не нужен)
+#  Сроки: 30s 15m 12h 7d 2w 1mo 1y 1d12h perm
+# ============================================================
+reasons:
+  cheats:
+    name: "Читы / запрещённое ПО"
+    icon: DIAMOND_SWORD
+    animation: ASCENSION
+    description:
+      - "&fЧиты, X-Ray, автокликер,"
+      - "&fбаговые и запрещённые моды."
+    ladder:
+      - "BAN 30d"
+      - "BAN 90d"
+      - "BAN perm"
+  toxicity:
+    name: "Оскорбления в чате"
+    icon: WRITABLE_BOOK
+    description:
+      - "&fОскорбления игроков,"
+      - "&fтоксичное поведение."
+    ladder:
+      - "WARN"
+      - "MUTE 1h"
+      - "MUTE 6h"
+      - "MUTE 1d"
+      - "MUTE 7d"
+  spam:
+    name: "Спам / флуд"
+    icon: PAPER
+    description:
+      - "&fПовторяющиеся сообщения,"
+      - "&fфлуд и капс."
+    ladder:
+      - "WARN"
+      - "MUTE 30m"
+      - "MUTE 3h"
+      - "MUTE 1d"
+  advertising:
+    name: "Реклама"
+    icon: OAK_SIGN
+    description:
+      - "&fРеклама сторонних проектов,"
+      - "&fсайтов и серверов."
+    ladder:
+      - "MUTE 1d"
+      - "MUTE 7d"
+      - "BAN perm"
+  griefing:
+    name: "Грифинг"
+    icon: IRON_PICKAXE
+    animation: STORM
+    description:
+      - "&fРазрушение чужих построек,"
+      - "&fкража, лаг-машины."
+    ladder:
+      - "BAN 3d"
+      - "BAN 14d"
+      - "BAN perm"
+  bug_abuse:
+    name: "Использование багов"
+    icon: SPIDER_EYE
+    description:
+      - "&fДюп и злоупотребление"
+      - "&fошибками сервера."
+    ladder:
+      - "WARN"
+      - "BAN 3d"
+      - "BAN 14d"
+      - "BAN perm"
+  disrespect:
+    name: "Неуважение к стаффу"
+    icon: GOLDEN_HELMET
+    description:
+      - "&fГрубость и оскорбления"
+      - "&fв адрес администрации."
+    ladder:
+      - "MUTE 3h"
+      - "MUTE 1d"
+      - "BAN 3d"
+  nick:
+    name: "Неприемлемый ник / скин"
+    icon: NAME_TAG
+    description:
+      - "&fОскорбительный никнейм"
+      - "&fили скин."
+    ladder:
+      - "KICK"
+      - "BAN 1d"
+      - "BAN perm"
+  evasion:
+    name: "Обход наказания"
+    icon: ENDER_EYE
+    description:
+      - "&fАльт-аккаунты забаненных"
+      - "&fили замученных игроков."
+    ladder:
+      - "IPBAN perm"
+  threats:
+    name: "Угрозы / DDoS / доксинг"
+    icon: SKELETON_SKULL
+    animation: VORTEX
+    permission: mirageputils.punish.severe
+    description:
+      - "&fУгрозы, раскрытие данных,"
+      - "&fатаки на сервер."
+    ladder:
+      - "IPBAN perm"
